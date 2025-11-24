@@ -1,4 +1,3 @@
-// components/StreamforgeWrapper.tsx
 import StreamforgeUI from "./StreamforgeUI";
 
 export default function StreamforgeWrapper({
@@ -8,5 +7,7 @@ export default function StreamforgeWrapper({
   initialTasks: any[];
   user: any;
 }) {
-  return <StreamforgeUI initialTasks={initialTasks} user={user} />;
+  return (
+    <StreamforgeUI initialTasks={initialTasks} user={user} />
+  );
 }

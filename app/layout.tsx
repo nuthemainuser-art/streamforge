@@ -1,23 +1,19 @@
 // app/layout.tsx
 import "./globals.css";
-import { createClient } from "@/lib/supabase/client";
-import { SessionContextProvider } from "@supabase/auth-helpers-react";
+import type { ReactNode } from "react";
 
 export const metadata = {
   title: "Streamforge",
-  description: "Streamforge – tasks, comics and social engine",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const supabase = createClient();
-
+export default function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   return (
     <html lang="en">
-      <body>
-        <SessionContextProvider supabaseClient={supabase}>
-          {children}
-        </SessionContextProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
