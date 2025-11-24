@@ -1,4 +1,12 @@
+//app.page.tsx
+
+import { redirect } from "next/navigation";
+
+
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
+export const runtime = "nodejs";
 
 import StreamforgeWrapper from "@/components/StreamforgeWrapper";
 import { createServer } from "@/lib/supabase/server";
@@ -11,7 +19,7 @@ export default async function StreamforgePage() {
   } = await supabase.auth.getSession();
 
   if (!session) {
-    return <meta httpEquiv="refresh" content="0; url=/login" />;
+		redirect("/login");
   }
 
   const { data: tasks } = await supabase
