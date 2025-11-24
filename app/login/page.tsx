@@ -1,11 +1,10 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
-import { useState } from "react";
-
-// These MUST come AFTER imports when using "use client"
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
+
+import { createClient } from "@/lib/supabase/client";
+import { useState } from "react";
 
 export default function LoginPage() {
   const supabase = createClient();
