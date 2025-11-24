@@ -2,6 +2,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTaskDBPlugin } from "@/lib/db/plugins";
 
+export const runtime = "nodejs";
+
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);

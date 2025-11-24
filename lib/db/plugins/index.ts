@@ -20,3 +20,5 @@ export function getTaskDBPlugin(): TaskDBPlugin {
   }
   return plugin;
 }
+
+export const runtime = "nodejs";

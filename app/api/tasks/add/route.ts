@@ -1,6 +1,7 @@
 // app/api/tasks/add/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getTaskDBPlugin } from "@/lib/db/plugins";
+export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   try {

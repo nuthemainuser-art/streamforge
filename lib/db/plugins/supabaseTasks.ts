@@ -93,3 +93,5 @@ export const supabaseTaskPlugin: TaskDBPlugin = {
     };
   },
 };
+
+export const runtime = "nodejs";

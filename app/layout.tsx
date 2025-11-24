@@ -2,6 +2,9 @@
 import "./globals.css";
 import type { ReactNode } from "react";
 
+export const runtime = "nodejs";
+
+
 export const metadata = {
   title: "Streamforge",
 };
