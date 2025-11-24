@@ -1,4 +1,3 @@
-// app/login/page.tsx
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
@@ -8,21 +7,17 @@ export default function LoginPage() {
   const supabase = createClient();
   const [email, setEmail] = useState("");
 
-  async function login(e: React.FormEvent<HTMLFormElement>) {
+  async function login(e: React.FormEvent) {
     e.preventDefault();
 
-    const { error } = await supabase.auth.signInWithOtp({
+    await supabase.auth.signInWithOtp({
       email,
       options: {
         emailRedirectTo: `${location.origin}/`,
       },
     });
 
-    if (error) {
-      alert("Error sending magic link: " + error.message);
-    } else {
-      alert("Magic link sent to your email.");
-    }
+    alert("Magic link sent to your email.");
   }
 
   return (
@@ -34,12 +29,11 @@ export default function LoginPage() {
         <input
           className="sf-input"
           type="email"
-          required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <button className="sf-btn sf-btn-primary" type="submit" style={{ marginTop: 20 }}>
+        <button className="sf-btn sf-btn-primary" style={{ marginTop: 20 }}>
           Send Magic Link
         </button>
       </form>

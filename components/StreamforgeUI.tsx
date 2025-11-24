@@ -1,32 +1,59 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { v4 as uuid } from "uuid";
 
 type TabId = "today" | "tasks" | "comics" | "social";
 
-export default function StreamforgeUI({ initialTasks, user }) {
+interface Task {
+  id?: string;
+  title?: string;
+  tags?: string;
+  week?: number;
+  day?: number;
+  hour?: number;
+  minute?: number;
+  priority?: string;
+  reward?: string;
+  focus?: string;
+  stage?: string;
+  status?: string;
+  created_at?: string;
+  [key: string]: any;
+}
+
+interface StreamforgeUIProps {
+  initialTasks: Task[];
+  user: {
+    id: string;
+    email?: string;
+    [key: string]: any;
+  };
+}
+
+export default function StreamforgeUI({
+  initialTasks,
+  user,
+}: StreamforgeUIProps) {
   const supabase = createClient();
 
   const [tab, setTab] = useState<TabId>("tasks");
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [offset, setOffset] = useState(20);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
-  const [draftTask, setDraftTask] = useState({});
-  const [log, setLog] = useState([]);
+  const [draftTask, setDraftTask] = useState<any>({});
+  const [log, setLog] = useState<any[]>([]);
 
-  // --- log helper ---
   const logMsg = (msg: string) =>
     setLog((prev) => [
       ...prev,
       { id: uuid(), ts: new Date().toLocaleTimeString(), message: msg },
     ]);
 
-  // --- infinite scroll load ---
   async function loadMore(reset = false) {
     if (loading) return;
 
@@ -42,38 +69,37 @@ export default function StreamforgeUI({ initialTasks, user }) {
       .range(currentOffset, currentOffset + limit - 1);
 
     if (error) {
-      console.error(error);
       logMsg("Failed to load tasks.");
       setLoading(false);
       return;
     }
 
-    if (reset) setTasks(data);
-    else setTasks((prev) => [...prev, ...data]);
+    if (reset) setTasks(data || []);
+    else setTasks((prev) => [...prev, ...(data || [])]);
 
-    setOffset(currentOffset + data.length);
-    setHasMore(data.length === limit);
+    setOffset(currentOffset + (data?.length || 0));
+    setHasMore((data?.length || 0) === limit);
 
-    logMsg(`Loaded ${data.length} tasks.`);
+    logMsg(`Loaded ${data?.length || 0} tasks.`);
     setLoading(false);
   }
 
-  // --- modal open ---
   function openModal() {
     setDraftTask({});
     setShowModal(true);
   }
 
-  // --- modal close ---
   function closeModal() {
     setShowModal(false);
   }
 
-  // --- save task ---
-  async function handleSave(e) {
+  async function handleSave(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!draftTask.title) return alert("Title required");
+    if (!draftTask.title) {
+      alert("Title required");
+      return;
+    }
 
     setLoading(true);
 
@@ -93,12 +119,11 @@ export default function StreamforgeUI({ initialTasks, user }) {
       setTasks((prev) => [data, ...prev]);
     }
 
-    setShowModal(false);
     setLoading(false);
+    setShowModal(false);
   }
 
-  // --- render task ---
-  function renderTaskCard(t) {
+  function renderTaskCard(t: Task) {
     const tags =
       t.tags?.split(/[,; ]+/).map((s) => s.trim()).filter(Boolean) ?? [];
 
@@ -106,7 +131,8 @@ export default function StreamforgeUI({ initialTasks, user }) {
       <div key={t.id} className="sf-post">
         <div className="sf-title">{t.title}</div>
         <div className="sf-body">
-          Week {t.week || "-"} | Day {t.day || "-"} | {t.hour}:{t.minute} <br />
+          Week {t.week || "-"} | Day {t.day || "-"} | {t.hour}:{t.minute}
+          <br />
           Priority: {t.priority || "-"} | Reward: {t.reward || "-"} <br />
           Focus: {t.focus || "-"} | Stage: {t.stage || "-"} <br />
           Status: {t.status || "-"}
@@ -122,7 +148,6 @@ export default function StreamforgeUI({ initialTasks, user }) {
     );
   }
 
-  // --- render tab ---
   function renderTab() {
     switch (tab) {
       case "today":
@@ -152,7 +177,7 @@ export default function StreamforgeUI({ initialTasks, user }) {
               </button>
             </div>
 
-            {tasks.map(renderTaskCard)}
+            {tasks.map((t) => renderTaskCard(t))}
 
             <div style={{ marginTop: 12, textAlign: "center" }}>
               {hasMore ? (
@@ -196,7 +221,6 @@ export default function StreamforgeUI({ initialTasks, user }) {
 
   return (
     <div className="sf-root">
-      {/* Tabs */}
       <div className="sf-tabs">
         {(["today", "tasks", "comics", "social"] as TabId[]).map((t) => (
           <div
@@ -209,10 +233,8 @@ export default function StreamforgeUI({ initialTasks, user }) {
         ))}
       </div>
 
-      {/* Content */}
       {renderTab()}
 
-      {/* Modal */}
       {showModal && (
         <div className="sf-modal-backdrop">
           <div className="sf-modal">
@@ -251,7 +273,6 @@ export default function StreamforgeUI({ initialTasks, user }) {
         </div>
       )}
 
-      {/* Log */}
       <div className="sf-log">
         {log.map((l) => (
           <div key={l.id}>
