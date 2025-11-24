@@ -1,13 +1,15 @@
-"use client";  
+"use client";
 
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
 
+// These MUST come AFTER imports when using "use client"
 export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 export default function LoginPage() {
   const supabase = createClient();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState<string>("");
 
   async function login(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -25,7 +27,6 @@ export default function LoginPage() {
   return (
     <div className="sf-content" style={{ padding: 20 }}>
       <h2>Login</h2>
-
       <form onSubmit={login}>
         <label>Email</label>
         <input
