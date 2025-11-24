@@ -1,8 +1,9 @@
-// app/page.tsx
-import { createServer } from "@/lib/supabase/server";
-import StreamforgeWrapper from "@/components/StreamforgeWrapper";
+export const dynamic = "force-dynamic";
 
-export default async function Page() {
+import StreamforgeWrapper from "@/components/StreamforgeWrapper";
+import { createServer } from "@/lib/supabase/server";
+
+export default async function StreamforgePage() {
   const supabase = createServer();
 
   const {
@@ -10,9 +11,7 @@ export default async function Page() {
   } = await supabase.auth.getSession();
 
   if (!session) {
-    return (
-      <meta httpEquiv="refresh" content="0; url=/login" />
-    );
+    return <meta httpEquiv="refresh" content="0; url=/login" />;
   }
 
   const { data: tasks } = await supabase

@@ -1,13 +1,15 @@
-"use client";
+"use client";  
 
-import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useState } from "react";
+
+export const dynamic = "force-dynamic";
 
 export default function LoginPage() {
   const supabase = createClient();
   const [email, setEmail] = useState("");
 
-  async function login(e: React.FormEvent) {
+  async function login(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     await supabase.auth.signInWithOtp({
@@ -23,6 +25,7 @@ export default function LoginPage() {
   return (
     <div className="sf-content" style={{ padding: 20 }}>
       <h2>Login</h2>
+
       <form onSubmit={login}>
         <label>Email</label>
         <input
