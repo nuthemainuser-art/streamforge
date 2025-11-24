@@ -14,7 +14,6 @@ export default async function StreamforgePage() {
     return <meta httpEquiv="refresh" content="0; url=/login" />;
   }
 
-  // Initial load for infinite scroll
   const { data: tasks } = await supabase
     .from("tasks")
     .select("*")
@@ -22,10 +21,5 @@ export default async function StreamforgePage() {
     .order("created_at", { ascending: false })
     .limit(20);
 
-  return (
-    <StreamforgeUI
-      initialTasks={tasks || []}
-      user={session.user}
-    />
-  );
+  return <StreamforgeUI initialTasks={tasks || []} user={session.user} />;
 }
