@@ -1,7 +1,6 @@
-// app/page.tsx
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import StreamforgeUI from "@/components/StreamforgeUI";
+import StreamforgeWrapper from "@/components/StreamforgeWrapper";
 
 export default async function StreamforgePage() {
   const supabase = createServerComponentClient({ cookies });
@@ -21,5 +20,7 @@ export default async function StreamforgePage() {
     .order("created_at", { ascending: false })
     .limit(20);
 
-  return <StreamforgeUI initialTasks={tasks || []} user={session.user} />;
+  return (
+    <StreamforgeWrapper initialTasks={tasks || []} user={session.user} />
+  );
 }
