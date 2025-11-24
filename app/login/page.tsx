@@ -1,10 +1,10 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
+
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 export default function LoginPage() {
   const supabase = createClient();
